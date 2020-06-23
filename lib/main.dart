@@ -1,8 +1,9 @@
-import 'package:expenseApp/widgets/transactionlist.dart';
+import './widgets/transactionlist.dart';
 
 import './widgets/newtransaction.dart';
 
 import './widgets/transactionlist.dart';
+import './widgets/chart.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
 
@@ -51,19 +52,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final amount = TextEditingController();
   final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      amount: 500,
-      title: 'Fees',
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      amount: 2500,
-      title: 'Books',
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //   id: 't1',
+    //   amount: 500,
+    //   title: 'Fees',
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't2',
+    //   amount: 2500,
+    //   title: 'Books',
+    //   date: DateTime.now(),
+    // ),
   ];
+
+  List<Transaction> get _recenttransactions {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(Duration(days: 7)),
+      );
+    }).toList();
+  }
 
   void _addnew(String txtitle, double txamount) {
     final newtx = Transaction(
@@ -111,14 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('Chart'),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recenttransactions),
             Transactionlist(_userTransactions),
           ],
         ),

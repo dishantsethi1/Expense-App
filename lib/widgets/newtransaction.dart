@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 
-class Newtransaction extends StatelessWidget {
+class Newtransaction extends StatefulWidget {
   final Function addtx;
-  final title = TextEditingController();
-  final amount = TextEditingController();
+
   Newtransaction(this.addtx);
+
+  @override
+  _NewtransactionState createState() => _NewtransactionState();
+}
+
+class _NewtransactionState extends State<Newtransaction> {
+  final title = TextEditingController();
+
+  final amount = TextEditingController();
 
   void submitdata() {
     final etitle = title.text;
@@ -13,10 +21,11 @@ class Newtransaction extends StatelessWidget {
     if (etitle.isEmpty || eamount <= 0) {
       return;
     }
-    addtx(
+    widget.addtx(
       etitle,
       eamount,
     );
+    Navigator.of(context).pop();
   }
 
   @override

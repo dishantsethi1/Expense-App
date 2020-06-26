@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import './widgets/transactionlist.dart';
 
 import './widgets/newtransaction.dart';
@@ -7,7 +9,16 @@ import './widgets/chart.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //   [
+  //     DeviceOrientation.portraitUp,
+  //     DeviceOrientation.portraitDown,
+  //   ],
+  // );                                             for restricting landscape mode
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -70,6 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
+  bool _chart = false;
+
   List<Transaction> get _recenttransactions {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(
@@ -114,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final islandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text(
         'Personal Expenses',
@@ -126,6 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+    final txlist = Container(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          0.7,
+      child: Transactionlist(_userTransactions, _deletetransactions),
+    );
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -133,18 +155,40 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height-MediaQuery.of(context).padding.top) *
-                  0.4,
-              child: Chart(_recenttransactions),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height-MediaQuery.of(context).padding.top) *
-                  0.6,
-              child: Transactionlist(_userTransactions, _deletetransactions),
-            ),
+            if (islandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('show chart'),
+                  Switch(
+                    value: _chart,
+                    onChanged: (val) {
+                      setState(() {
+                        _chart = val;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (!islandscape)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.3,
+                child: Chart(_recenttransactions),
+              ),
+            if (!islandscape) txlist,
+            if (islandscape)
+              _chart
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.3,
+                      child: Chart(_recenttransactions),
+                    )
+                  : txlist
           ],
         ),
       ),

@@ -17,11 +17,13 @@ class _NewtransactionState extends State<Newtransaction> {
   DateTime _selecteddate;
 
   void _submitdata() {
-    if(amount.text.isEmpty){return ;}
+    if (amount.text.isEmpty) {
+      return;
+    }
     final etitle = title.text;
     final eamount = double.parse(amount.text);
 
-    if (etitle.isEmpty || eamount <= 0||_selecteddate==null) {
+    if (etitle.isEmpty || eamount <= 0 || _selecteddate == null) {
       return;
     }
     widget.addtx(
@@ -46,66 +48,72 @@ class _NewtransactionState extends State<Newtransaction> {
         _selecteddate = pickeddate;
       });
     });
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(labelText: 'Title'),
-              // onChanged: (value){
-              //   title=value;
-              // },
-              controller: title,
-              onSubmitted: (_) => _submitdata(),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: 'AMount'),
-              // onChanged: (value){
-              //   amount=value;
-              // },
-              controller: amount,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submitdata(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                 Expanded(
-                                      child: Text(
-                      _selecteddate == null
-                          ? 'No date chosen! '
-                          : 'Picked Date : ${DateFormat.yMd().format(_selecteddate)}',
-                    ),
-                  ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    onPressed: _datepicker,
-                    child: Text(
-                      'Choose Date',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+          child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: 'Title'),
+                // onChanged: (value){
+                //   title=value;
+                // },
+                controller: title,
+                onSubmitted: (_) => _submitdata(),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'AMount'),
+                // onChanged: (value){
+                //   amount=value;
+                // },
+                controller: amount,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                onSubmitted: (_) => _submitdata(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        _selecteddate == null
+                            ? 'No date chosen! '
+                            : 'Picked Date : ${DateFormat.yMd().format(_selecteddate)}',
                       ),
                     ),
-                  )
-                ],
+                    FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      onPressed: _datepicker,
+                      child: Text(
+                        'Choose Date',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            RaisedButton(
-              onPressed: _submitdata,
-              child: Text('Add Transaction'),
-              textColor: Theme.of(context).textTheme.button.color,
-              color: Theme.of(context).primaryColor,
-            )
-          ],
+              RaisedButton(
+                onPressed: _submitdata,
+                child: Text('Add Transaction'),
+                textColor: Theme.of(context).textTheme.button.color,
+                color: Theme.of(context).primaryColor,
+              )
+            ],
+          ),
         ),
       ),
     );

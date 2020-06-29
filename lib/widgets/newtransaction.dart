@@ -97,7 +97,6 @@ class _NewtransactionState extends State<Newtransaction> {
                     ),
                     Platform.isIOS
                         ? CupertinoButton(
-                            color: Colors.blue,
                             onPressed: _datepicker,
                             child: Text(
                               'Choose Date',

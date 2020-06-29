@@ -161,46 +161,51 @@ class _MyHomePageState extends State<MyHomePage> {
           (mq.size.height - appBar.preferredSize.height - mq.padding.top) * 0.7,
       child: Transactionlist(_userTransactions, _deletetransactions),
     );
-    final pagebody = SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          if (islandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('show chart'),
-                Switch.adaptive(
-                  value: _chart,
-                  onChanged: (val) {
-                    setState(() {
-                      _chart = val;
-                    });
-                  },
-                ),
-              ],
-            ),
-          if (!islandscape)
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.3,
-              child: Chart(_recenttransactions),
-            ),
-          if (!islandscape) txlist,
-          if (islandscape)
-            _chart
-                ? Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.3,
-                    child: Chart(_recenttransactions),
-                  )
-                : txlist
-        ],
+    final pagebody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            if (islandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'show chart',
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  Switch.adaptive(
+                    value: _chart,
+                    onChanged: (val) {
+                      setState(() {
+                        _chart = val;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (!islandscape)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.3,
+                child: Chart(_recenttransactions),
+              ),
+            if (!islandscape) txlist,
+            if (islandscape)
+              _chart
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.3,
+                      child: Chart(_recenttransactions),
+                    )
+                  : txlist
+          ],
+        ),
       ),
     );
     return Platform.isIOS
